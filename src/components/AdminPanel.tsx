@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -7,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { toast } from 'sonner';
 import { LogOut, Save, Plus, Edit, Trash2 } from 'lucide-react';
+import { useAuth } from '@/hooks/useAuth';
 
 interface AdminPanelProps {
   onLogout: () => void;
@@ -14,11 +14,12 @@ interface AdminPanelProps {
 
 const AdminPanel: React.FC<AdminPanelProps> = ({ onLogout }) => {
   const [activeTab, setActiveTab] = useState('content');
+  const { signOut, profile } = useAuth();
 
-  const handleLogout = () => {
-    localStorage.removeItem('isAdmin');
-    onLogout();
+  const handleLogout = async () => {
+    await signOut();
     toast.success('Successfully logged out');
+    onLogout();
   };
 
   const handleSave = () => {
@@ -29,7 +30,10 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ onLogout }) => {
     <div className="min-h-screen bg-gray-50">
       <div className="bg-white shadow-sm border-b">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-          <h1 className="text-2xl font-bold text-blue-900">Ridge Line Energy - Admin Panel</h1>
+          <div>
+            <h1 className="text-2xl font-bold text-blue-900">Ridge Line Energy - Admin Panel</h1>
+            <p className="text-sm text-gray-600">Welcome, {profile?.full_name} ({profile?.email})</p>
+          </div>
           <Button onClick={handleLogout} variant="outline" className="flex items-center gap-2">
             <LogOut className="h-4 w-4" />
             Logout
