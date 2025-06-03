@@ -26,7 +26,7 @@ const Portfolio = () => {
           <div className="container mx-auto px-4">
             <div className="grid md:grid-cols-3 gap-8 mb-16">
               <div className="bg-white rounded-lg shadow-lg p-8 text-center">
-                <h3 className="text-3xl font-bold text-blue-600 mb-2">20.85 MW</h3>
+                <h3 className="text-3xl font-bold text-blue-600 mb-2">37.9 MW</h3>
                 <p className="text-gray-600">Total Portfolio Capacity</p>
               </div>
               <div className="bg-white rounded-lg shadow-lg p-8 text-center">
@@ -51,7 +51,7 @@ const Portfolio = () => {
                       <p><strong>Capacity:</strong> {project.capacity}</p>
                       <p><strong>Type:</strong> {project.type}</p>
                       <p><strong>Location:</strong> {project.location}</p>
-                      <p><strong>Investment:</strong> {project.investmentType || 'Development'}</p>
+                      <p><strong>Investment:</strong> Development</p>
                     </div>
                     <div className="flex justify-between items-center">
                       <span className={`px-3 py-1 rounded-full text-sm font-medium ${
