@@ -5,15 +5,18 @@ import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { toast } from 'sonner';
-import { LogOut, Save, Plus, Edit, Trash2 } from 'lucide-react';
+import { LogOut, Save, Plus, Edit, Trash2, Users, BarChart3, Settings, FileText } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
+import UserManagement from './UserManagement';
+import AdminStats from './AdminStats';
+import SystemLogs from './SystemLogs';
 
 interface AdminPanelProps {
   onLogout: () => void;
 }
 
 const AdminPanel: React.FC<AdminPanelProps> = ({ onLogout }) => {
-  const [activeTab, setActiveTab] = useState('content');
+  const [activeTab, setActiveTab] = useState('dashboard');
   const { signOut, profile } = useAuth();
 
   const handleLogout = async () => {
@@ -31,7 +34,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ onLogout }) => {
       <div className="bg-white shadow-sm border-b">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <div>
-            <h1 className="text-2xl font-bold text-blue-900">Ridge Line Energy - Admin Panel</h1>
+            <h1 className="text-2xl font-bold text-blue-900">Ridge Line Energy - Admin Dashboard</h1>
             <p className="text-sm text-gray-600">Welcome, {profile?.full_name} ({profile?.email})</p>
           </div>
           <Button onClick={handleLogout} variant="outline" className="flex items-center gap-2">
@@ -43,13 +46,56 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ onLogout }) => {
 
       <div className="container mx-auto px-4 py-8">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="grid w-full grid-cols-5">
-            <TabsTrigger value="content">Content</TabsTrigger>
+          <TabsList className="grid w-full grid-cols-6">
+            <TabsTrigger value="dashboard" className="flex items-center gap-2">
+              <BarChart3 className="h-4 w-4" />
+              Dashboard
+            </TabsTrigger>
+            <TabsTrigger value="users" className="flex items-center gap-2">
+              <Users className="h-4 w-4" />
+              Users
+            </TabsTrigger>
+            <TabsTrigger value="content" className="flex items-center gap-2">
+              <FileText className="h-4 w-4" />
+              Content
+            </TabsTrigger>
             <TabsTrigger value="projects">Projects</TabsTrigger>
             <TabsTrigger value="news">News</TabsTrigger>
-            <TabsTrigger value="gallery">Gallery</TabsTrigger>
-            <TabsTrigger value="careers">Careers</TabsTrigger>
+            <TabsTrigger value="logs" className="flex items-center gap-2">
+              <Settings className="h-4 w-4" />
+              Logs
+            </TabsTrigger>
           </TabsList>
+
+          <TabsContent value="dashboard" className="space-y-6">
+            <AdminStats />
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Quick Actions</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <Button className="w-full justify-start" variant="outline">
+                    <Plus className="h-4 w-4 mr-2" />
+                    Add New User
+                  </Button>
+                  <Button className="w-full justify-start" variant="outline">
+                    <Edit className="h-4 w-4 mr-2" />
+                    Edit Site Settings
+                  </Button>
+                  <Button className="w-full justify-start" variant="outline">
+                    <FileText className="h-4 w-4 mr-2" />
+                    Generate Report
+                  </Button>
+                </CardContent>
+              </Card>
+              <SystemLogs />
+            </div>
+          </TabsContent>
+
+          <TabsContent value="users">
+            <UserManagement />
+          </TabsContent>
 
           <TabsContent value="content">
             <Card>
@@ -143,54 +189,8 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ onLogout }) => {
             </Card>
           </TabsContent>
 
-          <TabsContent value="gallery">
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between">
-                <CardTitle>Gallery Management</CardTitle>
-                <Button className="flex items-center gap-2">
-                  <Plus className="h-4 w-4" />
-                  Upload Images
-                </Button>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-4 gap-4">
-                  {[1, 2, 3, 4, 5, 6, 7, 8].map((item) => (
-                    <div key={item} className="relative group">
-                      <div className="aspect-square bg-gray-200 rounded-lg"></div>
-                      <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <Button size="sm" variant="destructive">
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          <TabsContent value="careers">
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between">
-                <CardTitle>Career Management</CardTitle>
-                <Button className="flex items-center gap-2">
-                  <Plus className="h-4 w-4" />
-                  Add Job
-                </Button>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <Input placeholder="Job Title" />
-                  <Input placeholder="Department" />
-                  <Textarea placeholder="Job Description" className="min-h-32" />
-                  <div className="flex gap-2">
-                    <Input placeholder="Location" />
-                    <Input placeholder="Experience Required" />
-                  </div>
-                  <Button onClick={handleSave}>Save Job Posting</Button>
-                </div>
-              </CardContent>
-            </Card>
+          <TabsContent value="logs">
+            <SystemLogs />
           </TabsContent>
         </Tabs>
       </div>
